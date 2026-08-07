@@ -1,6 +1,8 @@
 node_modules/
 dist/
+client/dist/
 store.db
+server/store.db
 about.html
 cart.html
 checkout.html
