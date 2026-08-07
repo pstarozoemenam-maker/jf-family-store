@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 import { Link, Route, Routes, useSearchParams } from "react-router-dom";
 import "../styles.css";
 import Header from "./components/Header";
@@ -13,8 +13,8 @@ import { CheckoutPage } from "./components/Checkout";
 import { LoginPage, SignupPage } from "./components/Auth";
 import Footer from "./components/Footer";
 import { AboutPage, ContactPage, NotFoundPage } from "./pages/InfoPages";
-import { defaultProducts } from "./data/products";
 import { formatCurrency } from "./utils";
+import { StoreProvider, useStore } from "./context/StoreContext";
 
 const choiceCards = [
   {
@@ -55,197 +55,34 @@ const promiseCards = [
   },
 ];
 
-function useStoredState(key, initialValue) {
-  const [value, setValue] = useState(() => {
-    try {
-      const storedValue = localStorage.getItem(key);
-      return storedValue ? JSON.parse(storedValue) : initialValue;
-    } catch {
-      return initialValue;
-    }
-  });
-
-  useEffect(() => {
-    localStorage.setItem(key, JSON.stringify(value));
-  }, [key, value]);
-
-  return [value, setValue];
+function App() {
+  return (
+    <StoreProvider>
+      <StoreRoutes />
+    </StoreProvider>
+  );
 }
 
-function App() {
-  const [products, setProducts] = useState(defaultProducts);
-  const [isLoading, setIsLoading] = useState(true);
-  const [cart, setCart] = useStoredState("cart", []);
-  const [wishlist, setWishlist] = useStoredState("wishlist", []);
-  const [currentUser, setCurrentUser] = useStoredState("user", null);
-  const [toast, setToast] = useState("");
-
-  useEffect(() => {
-    let isMounted = true;
-
-    async function loadProducts() {
-      try {
-        const response = await fetch("/api/products");
-        if (!response.ok) throw new Error("Product request failed");
-        const data = await response.json();
-        if (isMounted && Array.isArray(data) && data.length) {
-          setProducts(data);
-        }
-      } catch (error) {
-        console.error(error);
-        if (isMounted) {
-          setProducts(defaultProducts);
-          setToast("Showing local product list.");
-        }
-      } finally {
-        if (isMounted) setIsLoading(false);
-      }
-    }
-
-    loadProducts();
-    return () => {
-      isMounted = false;
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!toast) return undefined;
-    const timeout = window.setTimeout(() => setToast(""), 2500);
-    return () => window.clearTimeout(timeout);
-  }, [toast]);
-
-  const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
-  const getProduct = (id) =>
-    products.find((product) => product.id === Number(id));
-  const cartTotal = cart.reduce((total, item) => {
-    const product = getProduct(item.id);
-    return total + (product ? product.price * item.quantity : 0);
-  }, 0);
-
-  function showToast(message) {
-    setToast(message);
-  }
-
-  function addToCart(id) {
-    if (!currentUser) {
-      showToast("Please log in to add products to your cart.");
-      return;
-    }
-
-    setCart((previousCart) => {
-      const existingItem = previousCart.find((item) => item.id === id);
-      if (existingItem) {
-        return previousCart.map((item) =>
-          item.id === id ? { ...item, quantity: item.quantity + 1 } : item,
-        );
-      }
-      return [...previousCart, { id, quantity: 1 }];
-    });
-    showToast("Added to cart");
-  }
-
-  function removeFromCart(id) {
-    setCart((previousCart) => previousCart.filter((item) => item.id !== id));
-  }
-
-  function updateQuantity(id, change) {
-    setCart((previousCart) =>
-      previousCart
-        .map((item) =>
-          item.id === id ? { ...item, quantity: item.quantity + change } : item,
-        )
-        .filter((item) => item.quantity > 0),
-    );
-  }
-
-  function toggleWishlist(id) {
-    setWishlist((previousWishlist) => {
-      if (previousWishlist.includes(id)) {
-        showToast("Removed from wishlist");
-        return previousWishlist.filter((item) => item !== id);
-      }
-      showToast("Added to wishlist");
-      return [...previousWishlist, id];
-    });
-  }
-
-  async function login(email, password) {
-    try {
-      const response = await fetch("/api/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password }),
-      });
-      const data = await response.json();
-      if (!data.success) {
-        showToast(data.message || "Invalid email or password");
-        return false;
-      }
-      setCurrentUser(data.user);
-      showToast("Login successful");
-      return true;
-    } catch (error) {
-      console.error(error);
-      showToast("Login failed");
-      return false;
-    }
-  }
-
-  async function signup(name, email, password) {
-    try {
-      const response = await fetch("/api/signup", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, password }),
-      });
-      const data = await response.json();
-      if (!data.success) {
-        showToast(data.message || "Signup failed");
-        return false;
-      }
-      showToast("Account created successfully");
-      return true;
-    } catch (error) {
-      console.error(error);
-      showToast("Signup failed");
-      return false;
-    }
-  }
-
-  function logout() {
-    setCurrentUser(null);
-    showToast("Logged out");
-  }
-
-  async function checkout(customer) {
-    try {
-      const response = await fetch("/api/orders", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          customerName: customer.name,
-          email: customer.email,
-          phone: customer.phone,
-          address: customer.address,
-          payment: customer.payment,
-          total: cartTotal,
-          items: cart,
-        }),
-      });
-      const data = await response.json();
-      if (!data.success) {
-        showToast("Unable to place order");
-        return false;
-      }
-      setCart([]);
-      showToast("Order placed successfully");
-      return true;
-    } catch (error) {
-      console.error(error);
-      showToast("Server error");
-      return false;
-    }
-  }
+function StoreRoutes() {
+  const {
+    products,
+    isLoading,
+    cart,
+    wishlist,
+    currentUser,
+    toast,
+    cartCount,
+    cartTotal,
+    addToCart,
+    removeFromCart,
+    updateQuantity,
+    toggleWishlist,
+    login,
+    signup,
+    logout,
+    checkout,
+    showToast,
+  } = useStore();
 
   return (
     <>
