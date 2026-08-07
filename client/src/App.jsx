@@ -127,6 +127,11 @@ function App() {
   }
 
   function addToCart(id) {
+    if (!currentUser) {
+      showToast("Please log in to add products to your cart.");
+      return;
+    }
+
     setCart((previousCart) => {
       const existingItem = previousCart.find((item) => item.id === id);
       if (existingItem) {
