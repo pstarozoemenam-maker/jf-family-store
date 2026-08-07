@@ -3,7 +3,6 @@ import {
     Link,
     Route,
     Routes,
-    useNavigate,
     useSearchParams
 } from "react-router-dom";
 import "../styles.css";
@@ -11,6 +10,9 @@ import Header from "./components/Header";
 import { InfoCardGrid, ProductGrid, ProductIcon } from "./components/ProductCatalog";
 import { CartPage } from "./components/Cart";
 import { WishlistPage } from "./components/Wishlist";
+import { CheckoutPage } from "./components/Checkout";
+import { LoginPage, SignupPage } from "./components/Auth";
+import FormField from "./components/FormField";
 import { formatCurrency } from "./utils";
 
 const choiceCards = [
@@ -353,99 +355,6 @@ function ProductPage({ products, isLoading, wishlist, onAddToCart, onToggleWishl
             </section>
         </>
     );
-}
-
-function CheckoutPage({ cart, total, onCheckout }) {
-    const navigate = useNavigate();
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
-    async function handleSubmit(event) {
-        event.preventDefault();
-        setIsSubmitting(true);
-        const formData = new FormData(event.currentTarget);
-        const success = await onCheckout(Object.fromEntries(formData.entries()));
-        setIsSubmitting(false);
-        if (success) navigate("/");
-    }
-
-    if (!cart.length) return <section className="section"><SectionHeading eyebrow="Checkout" title="Your cart is empty">Add a product before completing your order.</SectionHeading><div className="empty-state"><Link to="/shop" className="btn btn-primary">Browse Products</Link></div></section>;
-
-    return (
-        <section className="section">
-            <SectionHeading eyebrow="Checkout" title="Complete Your Order">Fill in your details below to place your order.</SectionHeading>
-            <div className="checkout-grid">
-                <div className="auth-card">
-                    <form onSubmit={handleSubmit}>
-                        <FormField label="Full Name"><input type="text" name="name" placeholder="Enter your full name" required /></FormField>
-                        <FormField label="Email Address"><input type="email" name="email" placeholder="Enter your email" required /></FormField>
-                        <FormField label="Phone Number"><input type="tel" name="phone" placeholder="Enter your phone number" required /></FormField>
-                        <FormField label="Delivery Address"><textarea name="address" rows="4" placeholder="Enter your delivery address" required /></FormField>
-                        <FormField label="Payment Method"><select name="payment" defaultValue="" required><option value="">Choose Payment Method</option><option>Cash on Delivery</option><option>Bank Transfer</option><option>Card</option></select></FormField>
-                        <button type="submit" className="btn btn-primary" disabled={isSubmitting}>{isSubmitting ? "Placing Order..." : "Place Order"}</button>
-                    </form>
-                </div>
-                <div className="checkout-summary">
-                    <h2>Order Summary</h2>
-                    <p>Total Amount</p>
-                    <h1>{formatCurrency(total)}</h1>
-                    <p>Your cart total will automatically appear here.</p>
-                    <Link to="/cart" className="btn btn-secondary">Back to Cart</Link>
-                </div>
-            </div>
-        </section>
-    );
-}
-
-function FormField({ label, children }) {
-    return <div className="form-group"><label>{label}</label>{children}</div>;
-}
-
-function LoginPage({ onLogin, onMessage }) {
-    const navigate = useNavigate();
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
-    async function handleSubmit(event) {
-        event.preventDefault();
-        setIsSubmitting(true);
-        const formData = new FormData(event.currentTarget);
-        const success = await onLogin(formData.get("email"), formData.get("password"));
-        setIsSubmitting(false);
-        if (success) navigate("/");
-    }
-
-    return <AuthLayout title="Welcome Back" description="Login to continue shopping with JF & Family." onSubmit={handleSubmit} submitLabel={isSubmitting ? "Logging In..." : "Login"} footer={<>Don't have an account? <Link to="/signup">Create Account</Link></>}>
-        <FormField label="Email Address"><input type="email" name="email" placeholder="Enter your email" required /></FormField>
-        <FormField label="Password"><input type="password" name="password" placeholder="Enter your password" required /></FormField>
-    </AuthLayout>;
-}
-
-function SignupPage({ onSignup, onMessage }) {
-    const navigate = useNavigate();
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
-    async function handleSubmit(event) {
-        event.preventDefault();
-        const formData = new FormData(event.currentTarget);
-        if (formData.get("password") !== formData.get("confirm")) {
-            onMessage("Passwords do not match");
-            return;
-        }
-        setIsSubmitting(true);
-        const success = await onSignup(formData.get("name").trim(), formData.get("email").trim(), formData.get("password"));
-        setIsSubmitting(false);
-        if (success) navigate("/login");
-    }
-
-    return <AuthLayout title="Create Account" description="Join JF & Family and start shopping today." onSubmit={handleSubmit} submitLabel={isSubmitting ? "Creating Account..." : "Create Account"} footer={<>Already have an account? <Link to="/login">Login</Link></>}>
-        <FormField label="Full Name"><input type="text" name="name" placeholder="Enter your full name" required /></FormField>
-        <FormField label="Email Address"><input type="email" name="email" placeholder="Enter your email" required /></FormField>
-        <FormField label="Password"><input type="password" name="password" placeholder="Create a password" required /></FormField>
-        <FormField label="Confirm Password"><input type="password" name="confirm" placeholder="Confirm your password" required /></FormField>
-    </AuthLayout>;
-}
-
-function AuthLayout({ title, description, onSubmit, submitLabel, footer, children }) {
-    return <section className="auth-section"><div className="auth-card"><h1>{title}</h1><p>{description}</p><form onSubmit={onSubmit}>{children}<button type="submit" className="btn btn-primary">{submitLabel}</button></form><p className="auth-link">{footer}</p></div></section>;
 }
 
 function AboutPage() {
