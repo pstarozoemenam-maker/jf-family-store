@@ -188,18 +188,18 @@ textarea:focus {
   font-size: 13px;
 }
 
-.top-nav {
-  display: flex;
-  align-items: center;
-  gap: 22px;
-}
-
 .nav-button {
   background: transparent;
   color: #334155;
   font: inherit;
   font-weight: 600;
   padding: 0;
+}
+
+.top-nav {
+  display: flex;
+  align-items: center;
+  gap: 22px;
 }
 
 .top-nav a {
@@ -223,6 +223,102 @@ textarea:focus {
   height: 3px;
   background: #2563eb;
   border-radius: 10px;
+}
+
+.user-menu {
+  position: relative;
+}
+
+.user-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  border: none;
+  background: transparent;
+  color: #334155;
+  font: inherit;
+  font-weight: 600;
+  padding: 0 10px;
+}
+
+.user-avatar {
+  width: 36px;
+  height: 36px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: #e2e8f0;
+}
+
+.user-label {
+  display: inline-block;
+}
+
+.user-dropdown {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 12px);
+  width: 220px;
+  border-radius: 18px;
+  background: #fff;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  z-index: 1000;
+}
+
+.user-greeting {
+  padding: 14px 18px;
+  color: var(--muted);
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.menu-item,
+.logout-button {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 14px 18px;
+  background: transparent;
+  border: none;
+  color: #334155;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.menu-item:hover,
+.logout-button:hover {
+  background: #f8fafc;
+}
+
+.user-menu .menu-item {
+  text-decoration: none;
+}
+
+.profile-details,
+.order-list {
+  display: grid;
+  gap: 14px;
+}
+
+.order-card {
+  padding: 18px;
+  border-radius: 18px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+}
+
+.profile-details p {
+  background: #fff;
+  padding: 16px;
+  border-radius: 14px;
+  border: 1px solid #e2e8f0;
+}
+
+.order-card p {
+  margin: 0;
+  color: #334155;
 }
 
 .cart-button {
@@ -664,6 +760,29 @@ textarea:focus {
 
   .top-nav {
     flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .user-dropdown {
+    right: auto;
+    left: 50%;
+    transform: translateX(-50%);
+    width: min(260px, 100%);
+  }
+
+  .user-button {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .top-nav a,
+  .cart-button,
+  .user-menu {
+    flex: 1 1 auto;
+    text-align: center;
+  }
+
+  .top-nav .cart-button {
     justify-content: center;
   }
 

@@ -11,6 +11,12 @@ import { CartPage } from "./components/Cart";
 import { WishlistPage } from "./components/Wishlist";
 import { CheckoutPage } from "./components/Checkout";
 import { LoginPage, SignupPage } from "./components/Auth";
+import {
+  ProfilePage,
+  OrdersPage,
+  DeliveredPage,
+  ChangePasswordPage,
+} from "./components/UserPages";
 import Footer from "./components/Footer";
 import { AboutPage, ContactPage, NotFoundPage } from "./pages/InfoPages";
 import { formatCurrency } from "./utils";
@@ -159,6 +165,10 @@ function StoreRoutes() {
             path="/signup"
             element={<SignupPage onSignup={signup} onMessage={showToast} />}
           />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/delivered" element={<DeliveredPage />} />
+          <Route path="/change-password" element={<ChangePasswordPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route
             path="/contact"
