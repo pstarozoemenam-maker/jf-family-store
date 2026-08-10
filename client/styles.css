@@ -692,3 +692,67 @@ textarea:focus {
     flex-direction: column;
   }
 }
+.password-input {
+  position: relative;
+  width: 100%;
+}
+
+.password-input input {
+  width: 100%;
+  padding-right: 45px;
+  box-sizing: border-box;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: transparent;
+  padding: 5px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: inherit;
+}
+
+.password-toggle svg {
+  width: 1.2rem;
+  height: 1.2rem;
+}
+
+.password-toggle:hover {
+  opacity: 0.7;
+}
+.password-input {
+  position: relative;
+  width: 100%;
+}
+
+.password-input input {
+  width: 100%;
+  padding-right: 50px;
+  box-sizing: border-box;
+}
+
+.password-toggle {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  border: none;
+  background: transparent;
+  padding: 5px;
+
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+}
+
+.password-toggle:hover {
+  opacity: 0.7;
+}
+
