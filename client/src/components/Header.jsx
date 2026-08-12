@@ -48,66 +48,62 @@ function Header({ cartCount, currentUser, onLogout }) {
             {label}
           </NavLink>
         ))}
-        <div className="user-menu" ref={menuRef}>
-          <button
-            type="button"
-            className="user-button"
-            onClick={() => setMenuOpen((open) => !open)}
-            aria-expanded={menuOpen}
-            aria-haspopup="true"
+        <div className="nav-actions">
+          <NavLink
+            to="/cart"
+            className={({ isActive }) =>
+              isActive ? "cart-button active" : "cart-button"
+            }
           >
-            <span className="user-avatar">👤</span>
-            <span className="user-label">
-              {currentUser ? `Hi, ${currentUser.name}` : "Account"}
-            </span>
-          </button>
+            Cart <span id="cart-count">{cartCount}</span>
+          </NavLink>
+          <div className="user-menu" ref={menuRef}>
+            {currentUser ? (
+              <>
+                <button
+                  type="button"
+                  className="user-button"
+                  onClick={() => setMenuOpen((open) => !open)}
+                  aria-expanded={menuOpen}
+                  aria-haspopup="true"
+                >
+                  <span className="user-avatar">👤</span>
+                  <span className="user-label">Hi, {currentUser.name}</span>
+                </button>
 
-          {menuOpen && (
-            <div className="user-dropdown">
-              {currentUser ? (
-                <>
-                  <div className="user-greeting">Hi, {currentUser.name}</div>
-                  <NavLink to="/profile" className="menu-item">
-                    Profile
-                  </NavLink>
-                  <NavLink to="/orders" className="menu-item">
-                    Orders
-                  </NavLink>
-                  <NavLink to="/delivered" className="menu-item">
-                    Delivered
-                  </NavLink>
-                  <NavLink to="/change-password" className="menu-item">
-                    Change Password
-                  </NavLink>
-                  <button
-                    type="button"
-                    className="menu-item logout-button"
-                    onClick={onLogout}
-                  >
-                    Logout
-                  </button>
-                </>
-              ) : (
-                <>
-                  <NavLink to="/login" className="menu-item">
-                    Login
-                  </NavLink>
-                  <NavLink to="/signup" className="menu-item">
-                    Signup
-                  </NavLink>
-                </>
-              )}
-            </div>
-          )}
+                {menuOpen && (
+                  <div className="user-dropdown">
+                    <div className="user-greeting">Hi, {currentUser.name}</div>
+                    <NavLink to="/profile" className="menu-item">
+                      Profile
+                    </NavLink>
+                    <NavLink to="/orders" className="menu-item">
+                      Orders
+                    </NavLink>
+                    <NavLink to="/delivered" className="menu-item">
+                      Delivered
+                    </NavLink>
+                    <NavLink to="/change-password" className="menu-item">
+                      Change Password
+                    </NavLink>
+                    <button
+                      type="button"
+                      className="menu-item logout-button"
+                      onClick={onLogout}
+                    >
+                      Logout
+                    </button>
+                  </div>
+                )}
+              </>
+            ) : (
+              <Link to="/login" className="user-button">
+                <span className="user-avatar">👤</span>
+                <span className="user-label">Login</span>
+              </Link>
+            )}
+          </div>
         </div>
-        <NavLink
-          to="/cart"
-          className={({ isActive }) =>
-            isActive ? "cart-button active" : "cart-button"
-          }
-        >
-          Cart <span id="cart-count">{cartCount}</span>
-        </NavLink>
       </nav>
     </header>
   );
