@@ -98,7 +98,6 @@ function Header({ cartCount, currentUser, onLogout }) {
               </>
             ) : (
               <Link to="/login" className="user-button">
-                <span className="user-avatar">👤</span>
                 <span className="user-label">Login</span>
               </Link>
             )}
