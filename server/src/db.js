@@ -1,7 +1,7 @@
 const path = require("path");
-const sqlite3 = require("sqlite3").verbose();
 
 function createSqliteDatabase() {
+  const sqlite3 = require("sqlite3").verbose();
   const database = new sqlite3.Database(path.join(__dirname, "..", "store.db"));
 
   database.serialize(() => {
@@ -89,6 +89,60 @@ function createPostgresDatabase() {
   };
 }
 
+function createMemoryDatabase() {
+  const users = [];
+  const orders = [];
+  let nextUserId = 1;
+  let nextOrderId = 1;
+
+  return {
+    run(sql, params, callback = () => {}) {
+      if (/INSERT INTO users/i.test(sql)) {
+        const [name, email, password] = params;
+        if (users.some((user) => user.email === email)) {
+          return callback(new Error("UNIQUE constraint failed: users.email"));
+        }
+        const user = { id: nextUserId++, name, email, password };
+        users.push(user);
+        return callback.call({ lastID: user.id }, null);
+      }
+
+      if (/INSERT INTO orders/i.test(sql)) {
+        const [customerName, email, phone, address, payment, total, items] = params;
+        const order = {
+          id: nextOrderId++,
+          customer_name: customerName,
+          email,
+          phone,
+          address,
+          payment,
+          total,
+          items,
+        };
+        orders.push(order);
+        return callback.call({ lastID: order.id }, null);
+      }
+
+      if (/UPDATE users SET password/i.test(sql)) {
+        const [password, id] = params;
+        const user = users.find((entry) => entry.id === id);
+        if (user) user.password = password;
+      }
+
+      return callback(null);
+    },
+    get(sql, params, callback) {
+      const user = users.find((entry) => entry.email === params[0]);
+      callback(null, user);
+    },
+    all(sql, params, callback) {
+      callback(null, [...orders].reverse());
+    },
+  };
+}
+
 module.exports = process.env.DATABASE_URL
   ? createPostgresDatabase()
+  : process.env.VERCEL
+    ? createMemoryDatabase()
   : createSqliteDatabase();
