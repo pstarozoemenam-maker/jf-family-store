@@ -60,7 +60,8 @@ function createPostgresDatabase() {
   ]);
 
   function query(sql, params, callback) {
-    const postgresSql = sql.replace(/\?/g, (_, index) => `$${index + 1}`);
+    let parameterNumber = 0;
+    const postgresSql = sql.replace(/\?/g, () => `$${++parameterNumber}`);
     const values = params || [];
     const insertSql = /^\s*INSERT\s/i.test(sql) && !/\bRETURNING\b/i.test(sql)
       ? `${postgresSql} RETURNING id`
