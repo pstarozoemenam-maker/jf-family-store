@@ -32,7 +32,8 @@ const choiceCards = [
   {
     icon: "💳",
     title: "Secure Payments",
-    description: "Multiple payment methods with safe and secure checkout.",
+    description:
+      "Multiple payment methods with safe and secure checkout.",
   },
   {
     icon: "⭐",
@@ -46,12 +47,14 @@ const promiseCards = [
   {
     icon: "🛡️",
     title: "Warranty",
-    description: "Genuine products backed by manufacturer warranty.",
+    description:
+      "Genuine products backed by manufacturer warranty.",
   },
   {
     icon: "📞",
     title: "Customer Support",
-    description: "Friendly support team available to help with your orders.",
+    description:
+      "Friendly support team available to help with your orders.",
   },
   {
     icon: "🏆",
@@ -61,6 +64,29 @@ const promiseCards = [
   },
 ];
 
+const testimonials = [
+  {
+    name: "Sarah Johnson",
+    role: "Verified Customer",
+    image: "/images/customer-1.jpg",
+    review:
+      "JF & Family made shopping for my new kitchen appliances so easy. Everything arrived safely and on time.",
+  },
+  {
+    name: "David Okafor",
+    role: "Verified Customer",
+    image: "/images/customer-2.jpg",
+    review:
+      "Great products and excellent customer service. I will definitely shop with JF & Family again.",
+  },
+  {
+    name: "Amaka Williams",
+    role: "Verified Customer",
+    image: "/images/customer-3.jpg",
+    review:
+      "I love the quality of the products. The whole shopping experience was smooth from start to finish.",
+  },
+];
 function App() {
   return (
     <StoreProvider>
@@ -97,6 +123,7 @@ function StoreRoutes() {
         currentUser={currentUser}
         onLogout={logout}
       />
+
       <main className="page-shell">
         <Routes>
           <Route
@@ -111,6 +138,7 @@ function StoreRoutes() {
               />
             }
           />
+
           <Route
             path="/shop"
             element={
@@ -123,6 +151,7 @@ function StoreRoutes() {
               />
             }
           />
+
           <Route
             path="/product"
             element={
@@ -135,6 +164,7 @@ function StoreRoutes() {
               />
             }
           />
+
           <Route
             path="/cart"
             element={
@@ -147,6 +177,7 @@ function StoreRoutes() {
               />
             }
           />
+
           <Route
             path="/checkout"
             element={
@@ -157,23 +188,42 @@ function StoreRoutes() {
               />
             }
           />
+
           <Route
             path="/login"
-            element={<LoginPage onLogin={login} onMessage={showToast} />}
+            element={
+              <LoginPage
+                onLogin={login}
+                onMessage={showToast}
+              />
+            }
           />
+
           <Route
             path="/signup"
-            element={<SignupPage onSignup={signup} onMessage={showToast} />}
+            element={
+              <SignupPage
+                onSignup={signup}
+                onMessage={showToast}
+              />
+            }
           />
+
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/orders" element={<OrdersPage />} />
           <Route path="/delivered" element={<DeliveredPage />} />
-          <Route path="/change-password" element={<ChangePasswordPage />} />
+          <Route
+            path="/change-password"
+            element={<ChangePasswordPage />}
+          />
+
           <Route path="/about" element={<AboutPage />} />
+
           <Route
             path="/contact"
             element={<ContactPage onMessage={showToast} />}
           />
+
           <Route
             path="/wishlist"
             element={
@@ -186,17 +236,25 @@ function StoreRoutes() {
               />
             }
           />
-          <Route path="*" element={<NotFoundPage />} />
+
+          <Route
+            path="*"
+            element={<NotFoundPage />}
+          />
         </Routes>
       </main>
+
       <Footer />
-      <div className={`toast ${toast ? "show" : ""}`} role="status">
+
+      <div
+        className={`toast ${toast ? "show" : ""}`}
+        role="status"
+      >
         {toast}
       </div>
     </>
   );
 }
-
 function SectionHeading({ eyebrow, title, children }) {
   return (
     <div className="section-heading">
@@ -216,33 +274,49 @@ function HomePage({
 }) {
   return (
     <>
+      {/* HERO */}
       <section className="hero">
         <div className="hero-content">
           <p className="eyebrow">Premium Home Appliances</p>
+
           <h1>Upgrade Your Home With Smart Living</h1>
+
           <p>
-            Shop premium kitchen appliances, electrical products, and lifestyle
-            essentials from JF & Family.
+            Shop premium kitchen appliances, electrical products,
+            and lifestyle essentials from JF & Family.
           </p>
+
           <div className="hero-buttons">
             <Link to="/shop" className="btn btn-primary">
               Shop Now
             </Link>
+
             <Link to="/about" className="btn btn-secondary">
               Learn More
             </Link>
           </div>
         </div>
+
         <div className="hero-image">
           <div className="product-media">
-            <span className="emoji">🏠</span>
+            <img
+              src="/images/home-appliances.jpg"
+              alt="Premium home appliances"
+              className="hero-real-image"
+            />
           </div>
         </div>
       </section>
+
+      {/* BEST SELLERS */}
       <section className="section">
-        <SectionHeading eyebrow="Featured Products" title="Best Sellers">
+        <SectionHeading
+          eyebrow="Featured Products"
+          title="Best Sellers"
+        >
           Explore our most popular appliances for every home.
         </SectionHeading>
+
         <ProductGrid
           products={products}
           isLoading={isLoading}
@@ -251,21 +325,69 @@ function HomePage({
           onToggleWishlist={onToggleWishlist}
         />
       </section>
+
+      {/* WHY CHOOSE US */}
       <section className="section">
         <SectionHeading
           eyebrow="Why Choose Us"
           title="Everything You Need In One Store"
         />
+
         <InfoCardGrid cards={choiceCards} />
       </section>
+
+      {/* OUR PROMISE */}
       <section className="section">
-        <SectionHeading eyebrow="Our Promise" title="Shop With Confidence" />
+        <SectionHeading
+          eyebrow="Our Promise"
+          title="Shop With Confidence"
+        />
+
         <InfoCardGrid cards={promiseCards} />
+      </section>
+
+      {/* TESTIMONIALS */}
+      <section className="section testimonials-section">
+        <SectionHeading
+          eyebrow="Customer Reviews"
+          title="What Our Customers Say"
+        >
+          Real experiences from customers who shop with JF & Family.
+        </SectionHeading>
+
+        <div className="testimonials-grid">
+          {testimonials.map((testimonial) => (
+            <article
+              className="testimonial-card"
+              key={testimonial.name}
+            >
+              <div className="testimonial-stars">
+                ★★★★★
+              </div>
+
+              <p className="testimonial-review">
+                "{testimonial.review}"
+              </p>
+
+              <div className="testimonial-author">
+                <img
+                  src={testimonial.image}
+                  alt={testimonial.name}
+                  className="testimonial-avatar"
+                />
+
+                <div>
+                  <strong>{testimonial.name}</strong>
+                  <span>{testimonial.role}</span>
+                </div>
+              </div>
+            </article>
+          ))}
+        </div>
       </section>
     </>
   );
 }
-
 function ShopPage({
   products,
   isLoading,
@@ -275,25 +397,40 @@ function ShopPage({
 }) {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("All");
-  const categories = ["All", "Kitchen", "Electrical", "Lifestyle"];
+
+  const categories = [
+    "All",
+    "Kitchen",
+    "Electrical",
+    "Lifestyle",
+  ];
+
   const filteredProducts = useMemo(() => {
     const keyword = search.trim().toLowerCase();
+
     return products.filter((product) => {
       const matchesCategory =
-        category === "All" || product.category === category;
+        category === "All" ||
+        product.category === category;
+
       const matchesSearch =
         !keyword ||
         product.name.toLowerCase().includes(keyword) ||
         product.category.toLowerCase().includes(keyword);
+
       return matchesCategory && matchesSearch;
     });
   }, [category, products, search]);
 
   return (
     <section className="section">
-      <SectionHeading eyebrow="Shop" title="Browse Our Products">
+      <SectionHeading
+        eyebrow="Shop"
+        title="Browse Our Products"
+      >
         Discover premium appliances for your home.
       </SectionHeading>
+
       <input
         type="search"
         value={search}
@@ -302,17 +439,21 @@ function ShopPage({
         aria-label="Search products"
         className="search-box"
       />
+
       <div className="filters">
         {categories.map((item) => (
           <button
             key={item}
-            className={`filter-btn ${category === item ? "active" : ""}`}
+            className={`filter-btn ${
+              category === item ? "active" : ""
+            }`}
             onClick={() => setCategory(item)}
           >
             {item}
           </button>
         ))}
       </div>
+
       <ProductGrid
         products={filteredProducts}
         isLoading={isLoading}
@@ -332,19 +473,23 @@ function ProductPage({
   onToggleWishlist,
 }) {
   const [searchParams] = useSearchParams();
+
   const product = products.find(
-    (item) => item.id === Number(searchParams.get("id")),
+    (item) =>
+      item.id === Number(searchParams.get("id"))
   );
+
   const relatedProducts = product
     ? products
         .filter(
           (item) =>
-            item.id !== product.id && item.category === product.category,
+            item.id !== product.id &&
+            item.category === product.category
         )
         .slice(0, 3)
     : [];
 
-  if (isLoading)
+  if (isLoading) {
     return (
       <section className="section">
         <div className="empty-state">
@@ -352,7 +497,11 @@ function ProductPage({
         </div>
       </section>
     );
-  if (!product) return <NotFoundPage title="Product not found" />;
+  }
+
+  if (!product) {
+    return <NotFoundPage title="Product not found" />;
+  }
 
   return (
     <>
@@ -361,11 +510,20 @@ function ProductPage({
           <div className="product-media">
             <ProductIcon product={product} />
           </div>
+
           <div>
-            <span className="pill">{product.category}</span>
+            <span className="pill">
+              {product.category}
+            </span>
+
             <h1>{product.name}</h1>
-            <div className="price">{formatCurrency(product.price)}</div>
+
+            <div className="price">
+              {formatCurrency(product.price)}
+            </div>
+
             <p>{product.description}</p>
+
             <div className="product-actions">
               <button
                 className="btn btn-primary"
@@ -373,20 +531,30 @@ function ProductPage({
               >
                 Add to Cart
               </button>
+
               <button
                 className="btn btn-secondary"
-                onClick={() => onToggleWishlist(product.id)}
+                onClick={() =>
+                  onToggleWishlist(product.id)
+                }
               >
-                {wishlist.includes(product.id) ? "♥ Saved" : "♡ Wishlist"}
+                {wishlist.includes(product.id)
+                  ? "♥ Saved"
+                  : "♡ Wishlist"}
               </button>
             </div>
           </div>
         </div>
       </section>
+
       <section className="section">
-        <SectionHeading eyebrow="You May Also Like" title="Related Products">
+        <SectionHeading
+          eyebrow="You May Also Like"
+          title="Related Products"
+        >
           Explore more premium products from JF & Family.
         </SectionHeading>
+
         <ProductGrid
           products={relatedProducts}
           wishlist={wishlist}
