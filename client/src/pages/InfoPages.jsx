@@ -18,7 +18,7 @@ export function AboutPage() {
             </div>
             <div className="detail-card">
                 <div><h2>Who We Are</h2><p>JF & Family is dedicated to providing premium home appliances that make everyday living easier, smarter, and more comfortable. We believe every home deserves reliable products at affordable prices.</p><br /><p>From modern kitchen equipment to electrical appliances and lifestyle products, our goal is to give customers the best shopping experience possible.</p></div>
-                <div className="product-media"><span className="emoji">🏠</span></div>
+                <div className="product-media"><img src="/images/about.jpg" alt="JF & Family appliances" /></div>
             </div>
         </section>
         <section className="section"><div className="section-heading"><h2>Our Mission</h2></div><InfoCardGrid cards={missionCards} /></section>

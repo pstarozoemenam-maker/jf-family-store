@@ -719,6 +719,21 @@ textarea:focus {
   font-weight: 700;
 }
 
+.auth-container {
+  display: flex;
+  justify-content: center;
+}
+
+.auth-footer {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.auth-footer a {
+  color: var(--primary);
+  font-weight: 600;
+}
+
 .checkout-grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
