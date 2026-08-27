@@ -2,6 +2,15 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useStore } from "../context/StoreContext";
 
+function parseOrderItems(order) {
+  try {
+    const parsed = JSON.parse(order?.items ?? "[]");
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
+  }
+}
+
 function UserSection({ title, children }) {
   return (
     <section className="section">
@@ -94,7 +103,7 @@ export function OrdersPage() {
               </p>
               <p>Email: {order.email}</p>
               <p>Total: ₦{order.total}</p>
-              <p>Items: {JSON.parse(order.items).length}</p>
+              <p>Items: {parseOrderItems(order).length}</p>
             </div>
           ))}
         </div>

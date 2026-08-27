@@ -12,6 +12,7 @@ function Header({ cartCount, currentUser, onLogout }) {
     ["/shop", "Shop"],
     ["/about", "About"],
     ["/contact", "Contact"],
+    ["/faq", "FAQ"],
     ["/wishlist", "Wishlist"],
   ];
 

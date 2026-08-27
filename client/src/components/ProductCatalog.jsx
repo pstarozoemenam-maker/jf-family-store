@@ -154,28 +154,51 @@ function ProductCard({
 }) {
   return (
     <article className="product-card">
-      <Link
-        to={`/product?id=${product.id}`}
-        className="product-media"
-        aria-label={`View ${product.name}`}
-      >
-        <ProductIcon product={product} />
-      </Link>
+        <Link
+          to={`/product?id=${product.id}`}
+          className="product-media"
+          aria-label={`View ${product.name}`}
+        >
+          <ProductIcon product={product} />
+          {product.badge && (
+            <span
+              className={`product-badge badge-${product.badge.toLowerCase()}`}
+            >
+              {product.badge}
+            </span>
+          )}
+        </Link>
 
-      <div className="product-content">
-        <span className="pill">{product.category}</span>
+        <div className="product-content">
+          <div className="product-meta">
+            <span className="pill">{product.category}</span>
+            <div className="product-rating">
+              <span className="stars">
+                {"★".repeat(Math.round(product.rating || 0))}
+              </span>
+              <span className="rating-value">{product.rating}</span>
+              {product.reviews && (
+                <span className="reviews">({product.reviews})</span>
+              )}
+            </div>
+          </div>
 
-        <h3>
-          <Link to={`/product?id=${product.id}`}>
-            {product.name}
-          </Link>
-        </h3>
+          <h3>
+            <Link to={`/product?id=${product.id}`}>
+              {product.name}
+            </Link>
+          </h3>
 
-        <p>{product.description}</p>
+          <p>{product.description}</p>
 
-        <div className="price">
-          {formatCurrency(product.price)}
-        </div>
+          <div className="price">
+            {product.oldPrice && (
+              <span className="price-old">
+                {formatCurrency(product.oldPrice)}
+              </span>
+            )}
+            {formatCurrency(product.price)}
+          </div>
 
         <div className="product-actions">
           <button

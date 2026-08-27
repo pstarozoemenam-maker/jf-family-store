@@ -10,6 +10,7 @@ import {
 import { CartPage } from "./components/Cart";
 import { WishlistPage } from "./components/Wishlist";
 import { CheckoutPage } from "./components/Checkout";
+import { OrderConfirmationPage } from "./components/OrderConfirmation";
 import { LoginPage, SignupPage } from "./components/Auth";
 import {
   ProfilePage,
@@ -19,7 +20,7 @@ import {
 } from "./components/UserPages";
 import { AdminPage } from "./components/Admin";
 import Footer from "./components/Footer";
-import { AboutPage, ContactPage, NotFoundPage } from "./pages/InfoPages";
+import { AboutPage, ContactPage, FaqPage, NotFoundPage } from "./pages/InfoPages";
 import { formatCurrency } from "./utils";
 import { StoreProvider, useStore } from "./context/StoreContext";
 
@@ -191,6 +192,11 @@ function StoreRoutes() {
           />
 
           <Route
+            path="/order-confirmation"
+            element={<OrderConfirmationPage />}
+          />
+
+          <Route
             path="/login"
             element={
               <LoginPage
@@ -226,6 +232,8 @@ function StoreRoutes() {
             path="/contact"
             element={<ContactPage onMessage={showToast} />}
           />
+
+          <Route path="/faq" element={<FaqPage />} />
 
           <Route
             path="/wishlist"

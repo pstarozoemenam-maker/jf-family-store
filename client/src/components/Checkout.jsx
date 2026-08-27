@@ -14,7 +14,7 @@ export function CheckoutPage({ cart, total, onCheckout }) {
     const success = await onCheckout(Object.fromEntries(formData.entries()));
     setIsSubmitting(false);
 
-    if (success) navigate("/");
+    if (success) navigate("/order-confirmation");
   }
 
   if (!cart.length) {

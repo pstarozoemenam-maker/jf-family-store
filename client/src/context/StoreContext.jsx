@@ -38,6 +38,7 @@ export function StoreProvider({ children }) {
   const [wishlist, setWishlist] = useStoredState("wishlist", []);
   const [currentUser, setCurrentUser] = useStoredState("user", null);
   const [toast, setToast] = useState("");
+  const [lastOrder, setLastOrder] = useState(null);
 
   useEffect(() => {
     let isMounted = true;
@@ -227,6 +228,7 @@ export function StoreProvider({ children }) {
         }
 
         setCart([]);
+        setLastOrder({ customer, items: cart, total: cartTotal });
         showToast("Order placed successfully");
         return true;
       } catch (error) {
@@ -246,6 +248,7 @@ export function StoreProvider({ children }) {
       wishlist,
       currentUser,
       toast,
+      lastOrder,
       cartCount: cart.reduce((sum, item) => sum + item.quantity, 0),
       cartTotal,
       addToCart,
@@ -265,6 +268,7 @@ export function StoreProvider({ children }) {
       wishlist,
       currentUser,
       toast,
+      lastOrder,
       cartTotal,
       addToCart,
       removeFromCart,

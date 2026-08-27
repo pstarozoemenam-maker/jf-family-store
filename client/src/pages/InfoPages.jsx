@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
 import FormField from "../components/FormField";
 import { InfoCardGrid } from "../components/ProductCatalog";
@@ -51,6 +52,74 @@ export function ContactPage({ onMessage }) {
             </div>
         </section>
         <section className="section"><div className="section-heading"><h2>Why Shop With Us?</h2></div><InfoCardGrid cards={serviceCards} /></section>
+    </>;
+}
+
+export function FaqPage() {
+    const [openIndex, setOpenIndex] = useState(0);
+
+    const faqs = [
+        {
+            q: "How long does delivery take?",
+            a: "Orders are processed within 24 hours and delivered within 2–5 business days, depending on your location in Nigeria. Large appliances may take a little longer and are delivered by our logistics partners."
+        },
+        {
+            q: "Do you offer returns or exchanges?",
+            a: "Yes. You can return any product within 7 days of delivery provided it is unused and in its original packaging. If you received a damaged or faulty item, contact us and we will arrange a replacement at no cost."
+        },
+        {
+            q: "How do I track my order?",
+            a: "Once your order ships, a confirmation email with your order summary is sent to you. You can also visit the 'My Orders' page while logged in to see the status of all your purchases."
+        },
+        {
+            q: "What payment methods do you accept?",
+            a: "We currently accept pay on delivery as well as online payment options. More payment methods will be added soon for added convenience."
+        },
+        {
+            q: "Is my personal information secure?",
+            a: "Absolutely. We use secure connections to protect your data and never share your personal information with third parties. Your account details are stored safely and used only to fulfill orders."
+        },
+        {
+            q: "How can I contact customer support?",
+            a: "You can reach our support team at support@jfandfamily.com or call +234 800 123 4567, Monday to Saturday, 9:00 AM – 6:00 PM. We're always happy to help."
+        }
+    ];
+
+    return <>
+        <section className="section">
+            <div className="section-heading">
+                <p className="eyebrow">Help Center</p>
+                <h2>Frequently Asked Questions</h2>
+                <p>Find quick answers about ordering, delivery, returns, and more.</p>
+            </div>
+
+            <div className="faq-list">
+                {faqs.map((faq, index) => {
+                    const isOpen = openIndex === index;
+                    return (
+                        <div
+                            key={index}
+                            className={`faq-item${isOpen ? " open" : ""}`}
+                        >
+                            <button
+                                className="faq-question"
+                                onClick={() => setOpenIndex(isOpen ? null : index)}
+                                aria-expanded={isOpen}
+                            >
+                                <span>{faq.q}</span>
+                                <span className="faq-toggle">{isOpen ? "−" : "+"}</span>
+                            </button>
+                            {isOpen && <div className="faq-answer"><p>{faq.a}</p></div>}
+                        </div>
+                    );
+                })}
+            </div>
+
+            <div className="faq-footer">
+                <p>Still have questions?</p>
+                <Link to="/contact" className="btn btn-primary">Contact Us</Link>
+            </div>
+        </section>
     </>;
 }
 
