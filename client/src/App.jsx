@@ -1,6 +1,9 @@
-import { useMemo, useState } from "react";
-import { Link, Route, Routes, useSearchParams } from "react-router-dom";
+import { useEffect, useMemo, useState } from "react";
+import { Link, Navigate, Route, Routes, useLocation, useSearchParams } from "react-router-dom";
 import "../styles.css";
+import "./mobile/mobile.css";
+import MobileApp from "./mobile/MobileApp";
+import { useIsMobile } from "./mobile/useIsMobile";
 import Header from "./components/Header";
 import {
   InfoCardGrid,
@@ -89,6 +92,16 @@ const testimonials = [
       "I love the quality of the products. The whole shopping experience was smooth from start to finish.",
   },
 ];
+function ScrollToTop() {
+  const { pathname, search } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [pathname, search]);
+
+  return null;
+}
+
 function App() {
   return (
     <StoreProvider>
@@ -98,6 +111,37 @@ function App() {
 }
 
 function StoreRoutes() {
+  const isMobile = useIsMobile();
+  const { pathname } = useLocation();
+  const isMobileRoute = pathname.startsWith("/m");
+
+  return (
+    <>
+      <ScrollToTop />
+      <DeviceRedirect isMobile={isMobile} isMobileRoute={isMobileRoute} pathname={pathname} />
+      {isMobile ? (
+        <MobileApp />
+      ) : (
+        <DesktopRoutes />
+      )}
+      <div id="app-toast-root" />
+    </>
+  );
+}
+
+function DeviceRedirect({ isMobile, isMobileRoute, pathname }) {
+  if (isMobile && !isMobileRoute) {
+    const target = pathname === "/" ? "/m" : `/m${pathname || ""}`;
+    return <Navigate to={target} replace />;
+  }
+  if (!isMobile && isMobileRoute) {
+    const target = pathname === "/m" ? "/" : pathname.replace(/^\/m/, "") || "/";
+    return <Navigate to={target} replace />;
+  }
+  return null;
+}
+
+function DesktopRoutes() {
   const {
     products,
     isLoading,
@@ -120,6 +164,7 @@ function StoreRoutes() {
 
   return (
     <>
+      <ScrollToTop />
       <Header
         cartCount={cartCount}
         currentUser={currentUser}

@@ -1,5 +1,7 @@
 node_modules/
 dist/
+.env
+server/.env
 client/dist/
 store.db
 server/store.db
@@ -13,3 +15,6 @@ script.js
 shop.html
 signup.html
 wishlist.html
+
+.vercel
+.env*

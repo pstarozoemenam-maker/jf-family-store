@@ -329,18 +329,18 @@ export function AdminPage() {
                     }
                     return (
                       <tr key={order.id}>
-                        <td>#{order.id}</td>
-                        <td>{order.customer_name}</td>
-                        <td>{order.email}</td>
-                        <td>{order.phone}</td>
-                        <td>{order.address}</td>
-                        <td>
+                        <td data-label="Order ID">#{order.id}</td>
+                        <td data-label="Customer">{order.customer_name}</td>
+                        <td data-label="Email">{order.email}</td>
+                        <td data-label="Phone">{order.phone}</td>
+                        <td data-label="Address">{order.address}</td>
+                        <td data-label="Payment">
                           <span className="payment-badge">{order.payment}</span>
                         </td>
-                        <td className="amount">
+                        <td className="amount" data-label="Total">
                           {formatCurrency(order.total)}
                         </td>
-                        <td>{itemCount}</td>
+                        <td data-label="Items">{itemCount}</td>
                       </tr>
                     );
                   })}
@@ -377,9 +377,9 @@ export function AdminPage() {
                 <tbody>
                   {users.map((user, index) => (
                     <tr key={user.id ?? index}>
-                      <td>#{user.id}</td>
-                      <td>{user.name}</td>
-                      <td>{user.email}</td>
+                      <td data-label="ID">#{user.id}</td>
+                      <td data-label="Name">{user.name}</td>
+                      <td data-label="Email">{user.email}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -538,12 +538,14 @@ export function AdminPage() {
                 <tbody>
                   {adminProducts.map((product) => (
                     <tr key={product.id}>
-                      <td>#{product.id}</td>
-                      <td>{product.name}</td>
-                      <td>{product.category}</td>
-                      <td className="amount">{formatCurrency(product.price)}</td>
-                      <td>{product.badge || "-"}</td>
-                      <td>
+                      <td data-label="ID">#{product.id}</td>
+                      <td data-label="Name">{product.name}</td>
+                      <td data-label="Category">{product.category}</td>
+                      <td className="amount" data-label="Price">
+                        {formatCurrency(product.price)}
+                      </td>
+                      <td data-label="Badge">{product.badge || "-"}</td>
+                      <td data-label="Actions">
                         <button
                           className="btn-delete"
                           onClick={() => handleDeleteProduct(product.id)}
@@ -952,6 +954,87 @@ export function AdminPage() {
 
         .btn-delete:hover {
           background: #fecaca;
+        }
+
+        @media (max-width: 768px) {
+          .admin-tabs {
+            flex-wrap: wrap;
+            border-bottom: none;
+            gap: 8px;
+          }
+
+          .tab-btn {
+            flex: 1 1 auto;
+            min-width: 45%;
+            text-align: center;
+            padding: 12px 10px;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+          }
+
+          .tab-btn.active {
+            background: var(--primary);
+            color: #fff;
+            border-color: var(--primary);
+          }
+
+          .orders-table-wrapper {
+            overflow: visible;
+            background: transparent;
+            box-shadow: none;
+            border-radius: 0;
+          }
+
+          .orders-table,
+          .orders-table thead,
+          .orders-table tbody,
+          .orders-table tr,
+          .orders-table td {
+            display: block;
+            width: 100%;
+          }
+
+          .orders-table thead {
+            display: none;
+          }
+
+          .orders-table tr {
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            padding: 8px 0;
+            margin-bottom: 16px;
+            border: 1px solid #e2e8f0;
+            overflow: hidden;
+          }
+
+          .orders-table td {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 16px;
+            border-bottom: 1px solid #eef2f7;
+            font-size: 14px;
+            text-align: right;
+          }
+
+          .orders-table tr td:last-child {
+            border-bottom: none;
+          }
+
+          .orders-table td::before {
+            content: attr(data-label);
+            font-weight: 600;
+            color: var(--muted);
+            flex-shrink: 0;
+            text-align: left;
+          }
+
+          .orders-table td.amount {
+            color: var(--primary);
+          }
         }
       `}</style>
     </section>

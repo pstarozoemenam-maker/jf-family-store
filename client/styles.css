@@ -1982,3 +1982,138 @@ input:focus, select:focus, textarea:focus {
   margin-bottom: 14px;
   font-weight: 500;
 }
+
+/* =========================================
+   MOBILE HARDENING — kill horizontal overflow
+   ========================================= */
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100%;
+}
+
+img,
+svg,
+video {
+  max-width: 100%;
+  height: auto;
+}
+
+h1,
+h2,
+h3 {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Stop fixed-size min columns from blowing past the viewport */
+@media (max-width: 768px) {
+  /* With the hamburger menu, keep brand + hamburger side by side
+     (overrides the stacked column layout from the older media query) */
+  .topbar {
+    flex-direction: row;
+    gap: 12px;
+    align-items: center;
+    padding: 12px 14px;
+    width: 92%;
+  }
+
+  .brand-mark {
+    width: 40px;
+    height: 40px;
+  }
+
+  .brand strong {
+    font-size: 15px;
+  }
+
+  .user-dropdown {
+    left: 0;
+    right: 0;
+    width: 100%;
+  }
+}
+
+@media (max-width: 560px) {
+  .hero,
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-content h1 {
+    font-size: 2rem;
+    line-height: 1.15;
+  }
+
+  .hero-content p {
+    font-size: 16px;
+  }
+
+  .hero {
+    padding: 42px 22px;
+    background-attachment: scroll;
+  }
+
+  .hero-image img {
+    max-width: 100%;
+  }
+
+  .section-heading h2 {
+    font-size: 1.7rem;
+  }
+
+  .page-shell {
+    width: 92%;
+    padding: 28px 0;
+  }
+
+  .section {
+    margin-bottom: 50px;
+  }
+
+  .product-media {
+    height: 190px;
+  }
+
+  .product-content {
+    padding: 18px;
+  }
+
+  .detail-card,
+  .summary-box,
+  .auth-card,
+  .checkout-summary {
+    padding: 22px;
+  }
+
+  .filters {
+    gap: 10px;
+    padding: 10px;
+  }
+
+  .filter-btn {
+    padding: 10px 16px;
+    font-size: 14px;
+  }
+
+  .confirmation-card {
+    padding: 34px 22px;
+  }
+
+  .footer {
+    border-radius: 0;
+  }
+
+  .newsletter-form {
+    flex-direction: column;
+  }
+
+  .newsletter-form button {
+    width: 100%;
+  }
+
+  .cart-controls button {
+    width: 40px;
+    height: 40px;
+  }
+}
