@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useStore } from "../context/StoreContext";
 import { formatCurrency } from "../utils";
@@ -6,6 +6,7 @@ import { formatCurrency } from "../utils";
 export function AdminPage() {
   const { currentUser } = useStore();
   const [orders, setOrders] = useState([]);
+  const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [activeTab, setActiveTab] = useState("overview");
 
@@ -30,6 +31,39 @@ export function AdminPage() {
         setIsLoading(false);
       });
   }, [currentUser]);
+
+  const loadUsers = useCallback(() => {
+    if (!currentUser || currentUser.email !== "pstarozoemenam@gmail.com") {
+      return;
+    }
+
+    fetch("/api/users")
+      .then((response) => response.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setUsers(data);
+        }
+      })
+      .catch((error) => {
+        console.error("Unable to load users", error);
+      });
+  }, [currentUser]);
+
+  useEffect(() => {
+    loadUsers();
+  }, [loadUsers]);
+
+  // Poll for new registrations while the Users tab is open so they appear immediately
+  useEffect(() => {
+    if (activeTab !== "users") {
+      return undefined;
+    }
+
+    loadUsers();
+    const interval = window.setInterval(loadUsers, 5000);
+
+    return () => window.clearInterval(interval);
+  }, [activeTab, loadUsers]);
 
   if (!currentUser) {
     return (
@@ -94,6 +128,12 @@ export function AdminPage() {
           📦 Orders
         </button>
         <button
+          className={`tab-btn ${activeTab === "users" ? "active" : ""}`}
+          onClick={() => setActiveTab("users")}
+        >
+          👥 Users
+        </button>
+        <button
           className={`tab-btn ${activeTab === "analytics" ? "active" : ""}`}
           onClick={() => setActiveTab("analytics")}
         >
@@ -132,10 +172,8 @@ export function AdminPage() {
             <div className="stat-card">
               <div className="stat-icon">👥</div>
               <div className="stat-content">
-                <p className="stat-label">Unique Customers</p>
-                <p className="stat-value">
-                  {new Set(orders.map((o) => o.email)).size}
-                </p>
+                <p className="stat-label">Registered Users</p>
+                <p className="stat-value">{users.length}</p>
               </div>
             </div>
           </div>
@@ -215,6 +253,47 @@ export function AdminPage() {
               <p>No orders found.</p>
             </div>
           )}
+        </div>
+      )}
+
+      {/* Users Tab */}
+      {activeTab === "users" && (
+        <div className="admin-orders">
+          <div className="users-header">
+            <h3>Registered Users</h3>
+            <button className="btn btn-secondary" onClick={loadUsers}>
+              Refresh
+            </button>
+          </div>
+          {users.length > 0 ? (
+            <div className="orders-table-wrapper">
+              <table className="orders-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {users.map((user, index) => (
+                    <tr key={user.id ?? index}>
+                      <td>#{user.id}</td>
+                      <td>{user.name}</td>
+                      <td>{user.email}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className="empty-state">
+              <p>No registered users yet.</p>
+            </div>
+          )}
+          <p className="users-hint">
+            New user registrations appear here automatically every few seconds.
+          </p>
         </div>
       )}
 
@@ -519,6 +598,23 @@ export function AdminPage() {
         .customer-total {
           font-weight: 700;
           color: var(--primary);
+        }
+
+        .users-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 16px;
+        }
+
+        .users-header h3 {
+          margin: 0;
+        }
+
+        .users-hint {
+          margin-top: 16px;
+          font-size: 13px;
+          color: var(--muted);
         }
       `}</style>
     </section>

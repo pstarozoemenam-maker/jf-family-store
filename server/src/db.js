@@ -154,6 +154,9 @@ function createMemoryDatabase() {
       callback(null, user);
     },
     all(sql, params, callback) {
+      if (/FROM users/i.test(sql)) {
+        return callback(null, [...users].reverse());
+      }
       callback(null, [...orders].reverse());
     },
   };
