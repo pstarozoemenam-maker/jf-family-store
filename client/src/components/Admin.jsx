@@ -4,11 +4,104 @@ import { useStore } from "../context/StoreContext";
 import { formatCurrency } from "../utils";
 
 export function AdminPage() {
-  const { currentUser } = useStore();
+  const { currentUser, refreshProducts } = useStore();
   const [orders, setOrders] = useState([]);
   const [users, setUsers] = useState([]);
+  const [adminProducts, setAdminProducts] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [adding, setAdding] = useState(false);
+  const [formMessage, setFormMessage] = useState("");
   const [activeTab, setActiveTab] = useState("overview");
+  const [form, setForm] = useState({
+    name: "",
+    category: "Kitchen",
+    price: "",
+    oldPrice: "",
+    image: "",
+    description: "",
+    rating: 4.5,
+    reviews: 0,
+    badge: "",
+  });
+
+  function updateField(field, value) {
+    setForm((previous) => ({ ...previous, [field]: value }));
+  }
+
+  const loadAdminProducts = useCallback(() => {
+    fetch("/api/products")
+      .then((response) => response.json())
+      .then((data) => {
+        if (Array.isArray(data)) {
+          setAdminProducts(data);
+        }
+      })
+      .catch((error) => {
+        console.error("Unable to load products", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    if (!currentUser || currentUser.email !== "pstarozoemenam@gmail.com") {
+      return;
+    }
+    loadAdminProducts();
+  }, [currentUser, loadAdminProducts]);
+
+  async function handleAddProduct(event) {
+    event.preventDefault();
+    setAdding(true);
+    setFormMessage("");
+    try {
+      const response = await fetch("/api/products", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          ...form,
+          price: Number(form.price),
+          oldPrice: form.oldPrice === "" ? null : Number(form.oldPrice),
+          rating: Number(form.rating),
+          reviews: Number(form.reviews),
+        }),
+      });
+      const data = await response.json();
+      if (!data.success) {
+        throw new Error(data.message || "Unable to add product");
+      }
+
+      setForm({
+        name: "",
+        category: "Kitchen",
+        price: "",
+        oldPrice: "",
+        image: "",
+        description: "",
+        rating: 4.5,
+        reviews: 0,
+        badge: "",
+      });
+      setFormMessage(`Product "${data.product.name}" added successfully.`);
+      await loadAdminProducts();
+      await refreshProducts();
+    } catch (error) {
+      console.error(error);
+      setFormMessage(error.message || "Unable to add product");
+    } finally {
+      setAdding(false);
+    }
+  }
+
+  async function handleDeleteProduct(id) {
+    try {
+      await fetch(`/api/products/${id}`, { method: "DELETE" });
+      setFormMessage("Product deleted.");
+      await loadAdminProducts();
+      await refreshProducts();
+    } catch (error) {
+      console.error(error);
+      setFormMessage("Unable to delete product.");
+    }
+  }
 
   useEffect(() => {
     if (!currentUser || currentUser.email !== "pstarozoemenam@gmail.com") {
@@ -132,6 +225,12 @@ export function AdminPage() {
           onClick={() => setActiveTab("users")}
         >
           👥 Users
+        </button>
+        <button
+          className={`tab-btn ${activeTab === "products" ? "active" : ""}`}
+          onClick={() => setActiveTab("products")}
+        >
+          🛍️ Products
         </button>
         <button
           className={`tab-btn ${activeTab === "analytics" ? "active" : ""}`}
@@ -294,6 +393,174 @@ export function AdminPage() {
           <p className="users-hint">
             New user registrations appear here automatically every few seconds.
           </p>
+        </div>
+      )}
+
+      {/* Products Tab */}
+      {activeTab === "products" && (
+        <div className="admin-products">
+          <h3>Add a New Product</h3>
+          <form className="product-form" onSubmit={handleAddProduct}>
+            <div className="form-grid">
+              <div className="form-group">
+                <label>Product Name</label>
+                <input
+                  type="text"
+                  value={form.name}
+                  onChange={(event) => updateField("name", event.target.value)}
+                  placeholder="e.g. ChefPro Studio Oven"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Category</label>
+                <select
+                  value={form.category}
+                  onChange={(event) => updateField("category", event.target.value)}
+                >
+                  <option>Kitchen</option>
+                  <option>Electrical</option>
+                  <option>Lifestyle</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label>Price (₦)</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={form.price}
+                  onChange={(event) => updateField("price", event.target.value)}
+                  placeholder="e.g. 145000"
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Original Price (₦) - optional</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={form.oldPrice}
+                  onChange={(event) => updateField("oldPrice", event.target.value)}
+                  placeholder="e.g. 170000"
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Image Path</label>
+                <input
+                  type="text"
+                  value={form.image}
+                  onChange={(event) => updateField("image", event.target.value)}
+                  placeholder="/images/products/oven.jpg"
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Badge</label>
+                <select
+                  value={form.badge}
+                  onChange={(event) => updateField("badge", event.target.value)}
+                >
+                  <option value="">None</option>
+                  <option value="Hot">Hot</option>
+                  <option value="New">New</option>
+                  <option value="Sale">Sale</option>
+                </select>
+              </div>
+
+              <div className="form-group">
+                <label>Rating (0 - 5)</label>
+                <input
+                  type="number"
+                  min="0"
+                  max="5"
+                  step="0.1"
+                  value={form.rating}
+                  onChange={(event) => updateField("rating", event.target.value)}
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Review Count</label>
+                <input
+                  type="number"
+                  min="0"
+                  value={form.reviews}
+                  onChange={(event) => updateField("reviews", event.target.value)}
+                />
+              </div>
+
+              <div className="form-group form-group-full">
+                <label>Description</label>
+                <input
+                  type="text"
+                  value={form.description}
+                  onChange={(event) => updateField("description", event.target.value)}
+                  placeholder="Short product description"
+                />
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="btn btn-primary"
+              disabled={adding}
+            >
+              {adding ? "Adding..." : "Add Product"}
+            </button>
+
+            {formMessage && <p className="form-message">{formMessage}</p>}
+          </form>
+
+          <div className="users-header">
+            <h3>Current Products ({adminProducts.length})</h3>
+            <button className="btn btn-secondary" onClick={loadAdminProducts}>
+              Refresh
+            </button>
+          </div>
+
+          {adminProducts.length > 0 ? (
+            <div className="orders-table-wrapper">
+              <table className="orders-table">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>Price</th>
+                    <th>Badge</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {adminProducts.map((product) => (
+                    <tr key={product.id}>
+                      <td>#{product.id}</td>
+                      <td>{product.name}</td>
+                      <td>{product.category}</td>
+                      <td className="amount">{formatCurrency(product.price)}</td>
+                      <td>{product.badge || "-"}</td>
+                      <td>
+                        <button
+                          className="btn-delete"
+                          onClick={() => handleDeleteProduct(product.id)}
+                        >
+                          Delete
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div className="empty-state">
+              <p>No products found.</p>
+            </div>
+          )}
         </div>
       )}
 
@@ -615,6 +882,76 @@ export function AdminPage() {
           margin-top: 16px;
           font-size: 13px;
           color: var(--muted);
+        }
+
+        .product-form {
+          background: #f8fafc;
+          border-radius: 12px;
+          padding: 24px;
+          margin-bottom: 30px;
+        }
+
+        .form-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+          gap: 16px;
+          margin-bottom: 20px;
+        }
+
+        .form-group {
+          display: flex;
+          flex-direction: column;
+          gap: 6px;
+        }
+
+        .form-group-full {
+          grid-column: 1 / -1;
+        }
+
+        .form-group label {
+          font-size: 13px;
+          font-weight: 600;
+          color: var(--text);
+        }
+
+        .form-group input,
+        .form-group select {
+          padding: 11px 12px;
+          border: 1px solid #e2e8f0;
+          border-radius: 8px;
+          font-family: inherit;
+          font-size: 14px;
+          background: #fff;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+          outline: none;
+          border-color: var(--primary);
+          box-shadow: 0 0 0 3px rgba(109,93,252,.15);
+        }
+
+        .form-message {
+          margin-top: 14px;
+          font-size: 14px;
+          font-weight: 600;
+          color: var(--primary);
+        }
+
+        .btn-delete {
+          background: #fee2e2;
+          color: #b91c1c;
+          border: none;
+          border-radius: 6px;
+          padding: 6px 12px;
+          font-weight: 600;
+          font-size: 13px;
+          cursor: pointer;
+          transition: 0.2s;
+        }
+
+        .btn-delete:hover {
+          background: #fecaca;
         }
       `}</style>
     </section>

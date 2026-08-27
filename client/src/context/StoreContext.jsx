@@ -40,34 +40,39 @@ export function StoreProvider({ children }) {
   const [toast, setToast] = useState("");
   const [lastOrder, setLastOrder] = useState(null);
 
+  const refreshProducts = useCallback(async () => {
+    try {
+      const response = await fetch("/api/products");
+      if (!response.ok) throw new Error("Product request failed");
+
+      const data = await response.json();
+      if (Array.isArray(data) && data.length) {
+        setProducts(data);
+      }
+    } catch (error) {
+      console.error(error);
+      setProducts(defaultProducts);
+    }
+  }, []);
+
   useEffect(() => {
     let isMounted = true;
 
-    async function loadProducts() {
-      try {
-        const response = await fetch("/api/products");
-        if (!response.ok) throw new Error("Product request failed");
-
-        const data = await response.json();
-        if (isMounted && Array.isArray(data) && data.length) {
-          setProducts(data);
-        }
-      } catch (error) {
-        console.error(error);
+    refreshProducts()
+      .catch(() => {
         if (isMounted) {
           setProducts(defaultProducts);
           setToast("Showing local product list.");
         }
-      } finally {
+      })
+      .finally(() => {
         if (isMounted) setIsLoading(false);
-      }
-    }
+      });
 
-    loadProducts();
     return () => {
       isMounted = false;
     };
-  }, []);
+  }, [refreshProducts]);
 
   useEffect(() => {
     if (!toast) return undefined;
@@ -259,6 +264,7 @@ export function StoreProvider({ children }) {
       signup,
       logout,
       checkout,
+      refreshProducts,
       showToast,
     }),
     [
@@ -278,6 +284,7 @@ export function StoreProvider({ children }) {
       signup,
       logout,
       checkout,
+      refreshProducts,
       showToast,
     ],
   );
