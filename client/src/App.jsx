@@ -1,5 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
-import { Link, Route, Routes, useLocation, useSearchParams } from "react-router-dom";
+import { useMemo, useState } from "react";
+import { Link, Route, Routes, useSearchParams } from "react-router-dom";
 import "../styles.css";
 import Header from "./components/Header";
 import {
@@ -89,16 +89,6 @@ const testimonials = [
       "I love the quality of the products. The whole shopping experience was smooth from start to finish.",
   },
 ];
-function ScrollToTop() {
-  const { pathname, search } = useLocation();
-
-  useEffect(() => {
-    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
-  }, [pathname, search]);
-
-  return null;
-}
-
 function App() {
   return (
     <StoreProvider>
@@ -130,7 +120,6 @@ function StoreRoutes() {
 
   return (
     <>
-      <ScrollToTop />
       <Header
         cartCount={cartCount}
         currentUser={currentUser}
