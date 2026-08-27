@@ -10,7 +10,7 @@ export function AdminPage() {
   const [activeTab, setActiveTab] = useState("overview");
 
   useEffect(() => {
-    if (!currentUser || currentUser.email !== "admin@jfandfamily.com") {
+    if (!currentUser || currentUser.email !== "pstarozoemenam@gmail.com") {
       return;
     }
 
@@ -43,7 +43,7 @@ export function AdminPage() {
     );
   }
 
-  if (currentUser.email !== "admin@jfandfamily.com") {
+  if (currentUser.email !== "pstarozoemenam@gmail.com") {
     return (
       <div className="empty-state">
         <h2>Access Denied</h2>

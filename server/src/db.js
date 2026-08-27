@@ -27,6 +27,11 @@ function createSqliteDatabase() {
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
       )
     `);
+
+    database.run(
+      "INSERT OR IGNORE INTO users(name,email,password) VALUES(?,?,?)",
+      ["Admin", "pstarozoemenam@gmail.com", "123456789"],
+    );
   });
 
   return database;
@@ -57,6 +62,12 @@ function createPostgresDatabase() {
         created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP
       )
     `),
+    pool
+      .query(
+        "INSERT INTO users(name,email,password) VALUES($1,$2,$3) ON CONFLICT (email) DO NOTHING",
+        ["Admin", "pstarozoemenam@gmail.com", "123456789"],
+      )
+      .catch(() => {}),
   ]);
 
   function query(sql, params, callback) {
@@ -94,6 +105,13 @@ function createMemoryDatabase() {
   const orders = [];
   let nextUserId = 1;
   let nextOrderId = 1;
+
+  users.push({
+    id: nextUserId++,
+    name: "Admin",
+    email: "pstarozoemenam@gmail.com",
+    password: "123456789",
+  });
 
   return {
     run(sql, params, callback = () => {}) {

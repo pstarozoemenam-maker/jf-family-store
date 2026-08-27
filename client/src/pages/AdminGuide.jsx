@@ -43,7 +43,7 @@ export default function AdminGuide() {
               fontFamily: "monospace",
             }}
           >
-            admin@jfandfamily.com
+            pstarozoemenam@gmail.com
           </code>
           <p>
             <strong>Password:</strong>
@@ -57,7 +57,7 @@ export default function AdminGuide() {
               fontFamily: "monospace",
             }}
           >
-            admin123
+            123456789
           </code>
         </div>
         <ol>
@@ -165,7 +165,7 @@ export default function AdminGuide() {
               unauthorized users
             </li>
             <li>
-              ✅ Only the admin account (admin@jfandfamily.com) can access the
+              ✅               Only the admin account (pstarozoemenam@gmail.com) can access the
               admin panel
             </li>
             <li>📊 All data in the admin panel is read-only for security</li>

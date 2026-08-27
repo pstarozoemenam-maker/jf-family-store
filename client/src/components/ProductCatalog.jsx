@@ -1,15 +1,6 @@
 import { Link } from "react-router-dom";
 import { formatCurrency } from "../utils";
 
-const productIcons = {
-  1: "🍳",
-  2: "🧊",
-  3: "💡",
-  4: "🥤",
-  5: "🧺",
-  6: "🌬️",
-};
-
 const featureIcons = {
   "🚚": (
     <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -107,9 +98,12 @@ const featureIcons = {
 
 export function ProductIcon({ product, className = "emoji" }) {
   return (
-    <span className={className}>
-      {productIcons[product.id] || product.icon || "🏠"}
-    </span>
+    <img
+      src={product.image}
+      alt={product.name}
+      className={className}
+      loading="lazy"
+    />
   );
 }
 

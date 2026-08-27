@@ -4,7 +4,7 @@ export const defaultProducts = [
     name: "ChefPro Studio Oven",
     category: "Kitchen",
     price: 145000,
-    icon: "🍳",
+    image: "/images/products/oven.svg",
     description: "Fast, elegant multi-function oven.",
   },
   {
@@ -12,7 +12,7 @@ export const defaultProducts = [
     name: "Aura Smart Fridge",
     category: "Electrical",
     price: 320000,
-    icon: "🧊",
+    image: "/images/products/fridge.svg",
     description: "Energy-saving smart fridge.",
   },
   {
@@ -20,7 +20,7 @@ export const defaultProducts = [
     name: "Glow LED Lighting Kit",
     category: "Lifestyle",
     price: 48000,
-    icon: "💡",
+    image: "/images/products/light.svg",
     description: "Modern ambient lighting.",
   },
   {
@@ -28,7 +28,7 @@ export const defaultProducts = [
     name: "Nova Blender Pro",
     category: "Kitchen",
     price: 76000,
-    icon: "🥤",
+    image: "/images/products/blender.svg",
     description: "Powerful kitchen blender.",
   },
   {
@@ -36,7 +36,7 @@ export const defaultProducts = [
     name: "Luma Washing Machine",
     category: "Electrical",
     price: 280000,
-    icon: "🧺",
+    image: "/images/products/washer.svg",
     description: "Quiet washing machine.",
   },
   {
@@ -44,7 +44,7 @@ export const defaultProducts = [
     name: "PureAir Air Purifier",
     category: "Lifestyle",
     price: 94000,
-    icon: "🌬️",
+    image: "/images/products/purifier.svg",
     description: "Cleaner indoor air.",
   },
 ];

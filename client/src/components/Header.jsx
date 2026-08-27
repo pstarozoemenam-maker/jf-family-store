@@ -14,6 +14,13 @@ function Header({ cartCount, currentUser, onLogout }) {
     ["/wishlist", "Wishlist"],
   ];
 
+  const isAdmin =
+    currentUser && currentUser.email === "pstarozoemenam@gmail.com";
+
+  if (isAdmin) {
+    links.push(["/admin", "Admin"]);
+  }
+
   useEffect(() => {
     function handleClickOutside(event) {
       if (
@@ -129,6 +136,16 @@ function Header({ cartCount, currentUser, onLogout }) {
                       Change Password
                     </NavLink>
 
+                    {currentUser.email ===
+                      "pstarozoemenam@gmail.com" && (
+                      <NavLink
+                        to="/admin"
+                        className="menu-item"
+                      >
+                        Admin Panel
+                      </NavLink>
+                    )}
+
                     <button
                       type="button"
                       className="menu-item logout-button"
@@ -239,6 +256,16 @@ function Header({ cartCount, currentUser, onLogout }) {
               >
                 Change Password
               </NavLink>
+
+              {currentUser.email ===
+                "pstarozoemenam@gmail.com" && (
+                <NavLink
+                  to="/admin"
+                  onClick={() => setMenuOpen(false)}
+                >
+                  Admin Panel
+                </NavLink>
+              )}
 
               <button
                 type="button"

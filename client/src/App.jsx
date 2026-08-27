@@ -17,6 +17,7 @@ import {
   DeliveredPage,
   ChangePasswordPage,
 } from "./components/UserPages";
+import { AdminPage } from "./components/Admin";
 import Footer from "./components/Footer";
 import { AboutPage, ContactPage, NotFoundPage } from "./pages/InfoPages";
 import { formatCurrency } from "./utils";
@@ -216,6 +217,8 @@ function StoreRoutes() {
             path="/change-password"
             element={<ChangePasswordPage />}
           />
+
+          <Route path="/admin" element={<AdminPage />} />
 
           <Route path="/about" element={<AboutPage />} />
 
