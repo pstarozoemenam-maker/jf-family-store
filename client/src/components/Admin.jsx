@@ -329,18 +329,18 @@ export function AdminPage() {
                     }
                     return (
                       <tr key={order.id}>
-                        <td>#{order.id}</td>
-                        <td>{order.customer_name}</td>
-                        <td>{order.email}</td>
-                        <td>{order.phone}</td>
-                        <td>{order.address}</td>
-                        <td>
+                        <td data-label="Order ID">#{order.id}</td>
+                        <td data-label="Customer">{order.customer_name}</td>
+                        <td data-label="Email">{order.email}</td>
+                        <td data-label="Phone">{order.phone}</td>
+                        <td data-label="Address">{order.address}</td>
+                        <td data-label="Payment">
                           <span className="payment-badge">{order.payment}</span>
                         </td>
-                        <td className="amount">
+                        <td className="amount" data-label="Total">
                           {formatCurrency(order.total)}
                         </td>
-                        <td>{itemCount}</td>
+                        <td data-label="Items">{itemCount}</td>
                       </tr>
                     );
                   })}
@@ -377,9 +377,9 @@ export function AdminPage() {
                 <tbody>
                   {users.map((user, index) => (
                     <tr key={user.id ?? index}>
-                      <td>#{user.id}</td>
-                      <td>{user.name}</td>
-                      <td>{user.email}</td>
+                      <td data-label="ID">#{user.id}</td>
+                      <td data-label="Name">{user.name}</td>
+                      <td data-label="Email">{user.email}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -538,12 +538,14 @@ export function AdminPage() {
                 <tbody>
                   {adminProducts.map((product) => (
                     <tr key={product.id}>
-                      <td>#{product.id}</td>
-                      <td>{product.name}</td>
-                      <td>{product.category}</td>
-                      <td className="amount">{formatCurrency(product.price)}</td>
-                      <td>{product.badge || "-"}</td>
-                      <td>
+                      <td data-label="ID">#{product.id}</td>
+                      <td data-label="Name">{product.name}</td>
+                      <td data-label="Category">{product.category}</td>
+                      <td className="amount" data-label="Price">
+                        {formatCurrency(product.price)}
+                      </td>
+                      <td data-label="Badge">{product.badge || "-"}</td>
+                      <td data-label="Actions">
                         <button
                           className="btn-delete"
                           onClick={() => handleDeleteProduct(product.id)}
