@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
+import Logo from "./Logo";
 
 function Header({ cartCount, currentUser, onLogout }) {
   const location = useLocation();
@@ -49,7 +50,9 @@ function Header({ cartCount, currentUser, onLogout }) {
     <header className="topbar">
       {/* LOGO */}
       <Link to="/" className="brand">
-        <div className="brand-mark">JF</div>
+        <div className="brand-mark">
+          <Logo />
+        </div>
 
         <div>
           <strong>JF & Family</strong>

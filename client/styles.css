@@ -174,14 +174,15 @@ textarea:focus {
 .brand-mark {
   width: 52px;
   height: 52px;
-  border-radius: 14px;
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
-  color: #fff;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
-  font-weight: 800;
+}
+
+.brand-mark svg {
+  width: 100%;
+  height: 100%;
+  display: block;
 }
 
 .brand strong {
@@ -1264,9 +1265,6 @@ body::after { right: -100px; bottom: 10%; background: #ff72b6; }
 .brand-mark {
   width: 48px;
   height: 48px;
-  border-radius: 16px;
-  background: linear-gradient(135deg, #6d5dfc, #ff6fb5 58%, #22d3ee);
-  box-shadow: 0 10px 28px rgba(109,93,252,.28);
 }
 
 .top-nav a:hover,
